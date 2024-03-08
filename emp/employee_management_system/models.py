@@ -7,6 +7,23 @@ class Department(models.Model):
     def __str__(self):
         return self.department
     
+# Model for Company
+class Company(models.Model):
+    name = models.CharField(max_length=100)
+    departments = models.ManyToManyField(Department)
+
+    def add_department(self, department_name):
+        department = Department.objects.get_or_create(department=department_name)
+        self.departments.add(department)
+        return department
+
+    def remove_department(self, department_name):
+        department = Department.objects.get(department=department_name)
+        self.departments.remove(department)
+
+    def display_departments(self):
+        return self.departments.all()
+
 # Model for Employee
 class Employee(models.Model):
     name = models.CharField(max_length=100)

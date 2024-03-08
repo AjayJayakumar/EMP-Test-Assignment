@@ -1,20 +1,24 @@
 from rest_framework import serializers
 
-from emp.employee_management_system.models import Department, Employee
+from .models import Department, Employee
 
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = [
-            "id",
-            "name"
-        ]
+        fields = '__all__'
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    department = serializers.SerializerMethodField()
+
     class Meta:
         model = Employee
-        exclude = [
-            "timestamp",
-            "last_updated"
+        fields = [
+            'name',
+            'employee_id',
+            'title',
+            'department',
         ]
-        
+
+    def get_department(self, instance):
+        dep = instance.department.department
+        return dep
